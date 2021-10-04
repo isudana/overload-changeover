@@ -6,11 +6,9 @@ Overload ChangeOver for Offgrid
    ====
    RX           - TX of PZEM
    TX           - RX of PZEM
-   GPIO5 (D1)   - Relay 2 (Inverter) Trigger
-   GPIO4 (D2)   - Relay 1 (Grid) Trigger
+   GPIO5 (D1)   - Relay 1 (Grid) Trigger
+   GPIO4 (D2)   - Relay 2 (Inverter) Trigger
    GPIO16       - Power Status LED
-   GPIO2 (D4)   - 
-   GPIO15 (D8)  - 
 
 */
 
@@ -68,8 +66,8 @@ bool debug = false;
 const int SYSTEM_STATE_LED_PIN = LED_BUILTIN;;
 const int POWER_STATE_LED_PIN = 16;
 
-const int GRID_RELAY_PIN = 4;
-const int INVERTER_RELAY_PIN = 5;
+const int GRID_RELAY_PIN = 5;
+const int INVERTER_RELAY_PIN = 4;
 
 const int RX_PIN = D1;
 const int TX_PIN = D2;
@@ -370,7 +368,7 @@ void handlePowerOverload(double power) {
         switchToGrid();
         overloadState = OVERLOADED;
     }
-  } else if (overloadState == OVERLOADED) {
+  } else if (overloadState == OVERLOADED  && (millis() > (transitionStartTime + (2 * transitionInterval)))) {
     if (power < powerThreshold) {
       publishMessage(EVENT_TOPIC, "RESTORED");
       overloadState = RESTORED;
