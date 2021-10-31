@@ -226,8 +226,10 @@ void goOnline() {
     if (!connectMqtt()) {
         connectionNextRetryTime = currentTime + connectionSuspensionDuration;
         offlineMode = true;
+        return;
     }
   }
+  offlineMode = false;
 }
 
 bool connectWifi() {
